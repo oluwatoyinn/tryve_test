@@ -57,13 +57,6 @@ const Dashboard = () => {
           changeType="down"
         />
         <StatsCard
-          title="Savings Rate"
-          value="32.4%"
-          icon="savings"
-          change="+4.3%"
-          changeType="up"
-        />
-        <StatsCard
           title="Net Worth"
           value="₦35,680"
           icon="income"

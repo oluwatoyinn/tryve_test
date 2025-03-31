@@ -1,6 +1,21 @@
 import React from 'react';
 
-const StatsCard = ({ title, value, icon, change, changeType }) => {
+// Define the icon types for better type safety
+type IconType = 'expense' | 'income' | 'chart';
+
+// Define the change direction types
+type ChangeType = 'up' | 'down';
+
+// Define the props interface
+interface StatsCardProps {
+  title: string;
+  value: string | number;
+  icon?: IconType;
+  change?: string; // Optional prop
+  changeType?: ChangeType; // Optional prop
+}
+
+const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, change, changeType }) => {
   return (
     <div className="bg-white rounded-xl p-5 shadow">
       <div className="flex justify-between items-start">

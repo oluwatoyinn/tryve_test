@@ -32,8 +32,7 @@ const LoginForm = () => {
     const success = await login(data?.email, data?.password);
     if (success) {
       navigate("/dashboard");
-    }
-    toast.error("Error", { description: error });
+    } else toast.error("Error", { description: error });
   };
 
   return (
