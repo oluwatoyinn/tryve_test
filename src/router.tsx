@@ -2,8 +2,11 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import DashboardLayout from "./layouts/DashboardLayout";
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import Savings from "./components/savings";
+import Investments from "./components/investments";
+import Transactions from "./components/transactions";
 
 const router = createBrowserRouter([
   {
@@ -24,23 +27,15 @@ const router = createBrowserRouter([
       },
       {
         path: "savings",
-        element: <Dashboard />,
+        element: <Savings />,
       },
       {
         path: "investments",
-        element: <Dashboard />,
+        element: <Investments />,
       },
       {
         path: "transactions",
-        element: <Dashboard />,
-      },
-      {
-        path: "goals",
-        element: <Dashboard />,
-      },
-      {
-        path: "settings",
-        element: <Dashboard />,
+        element: <Transactions />,
       },
     ],
   },

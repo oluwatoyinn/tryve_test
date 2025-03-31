@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import { Control, useController, UseControllerProps } from "react-hook-form";
 import { EyeIcon, EyeOff, LockKeyhole } from "lucide-react";
@@ -11,6 +11,7 @@ interface InputProps
   asterik?: boolean;
   icon?: JSX.Element;
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>;
   onIconClick?: () => void;
   showPassword?: boolean;

@@ -1,6 +1,5 @@
 // src/components/auth/LoginForm.jsx
 import { useState } from "react";
-import useAuthStore from "../../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,16 +7,17 @@ import { LoginInputs, LoginSchema } from "@/validations/login-schema";
 import TextField from "../common/text-field/text-field";
 import PasswordField from "../common/password-field/password-field";
 import { Button } from "../common/button";
+import { useAuthStore } from "@/store/authStore";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  // const navigate = useNavigate();
   const { control, handleSubmit } = useForm<LoginInputs>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "user@example.com",
+      password: "password",
     },
   });
 
@@ -27,16 +27,13 @@ const LoginForm = () => {
 
   const { login, isLoading, error } = useAuthStore();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const success = await login(email, password);
-  //   if (success) {
-  //     navigate("/dashboard");
-  //   }
-  // };
-
   const processForm: SubmitHandler<LoginInputs> = async (data) => {
     console.log(data);
+    const success = await login(data?.email, data?.password);
+    if (success) {
+      navigate("/dashboard");
+    }
+    toast.error("Error", { description: error });
   };
 
   return (
@@ -44,12 +41,7 @@ const LoginForm = () => {
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Welcome Back
       </h2>
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-          {error}
-        </div>
-      )}
-      <form>
+      <form className="flex flex-col gap-4">
         <div>
           <TextField
             label="Email"
