@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 
 // Define types for all data structures
@@ -54,6 +55,13 @@ interface DashboardState {
   isLoading: boolean;
   error: string | null;
   fetchDashboardData: () => Promise<void>;
+  addToSavings: (goalId: number, amount: number) => void;
+  createSavingsGoal: (goalData: Omit<SavingsGoal, "id" | "current">) => void;
+  updateSavingsGoal: (
+    goalId: number,
+    updatedData: Partial<SavingsGoal>
+  ) => void;
+  deleteSavingsGoal: (goalId: number) => void;
 }
 
 const useDashboardStore = create<DashboardState>((set) => ({
@@ -109,14 +117,14 @@ const useDashboardStore = create<DashboardState>((set) => ({
   savingsGoals: [
     {
       id: 1,
-      name: "Emergency Fund",
+      name: "Family Fund",
       target: 10000,
       current: 8450.33,
       deadline: "2025-06-30",
     },
     {
       id: 2,
-      name: "Vacation",
+      name: "New Car",
       target: 5000,
       current: 2500,
       deadline: "2025-12-31",
@@ -155,6 +163,81 @@ const useDashboardStore = create<DashboardState>((set) => ({
 
   isLoading: false,
   error: null,
+
+  addToSavings: (goalId, amount) =>
+    set((state) => {
+      // Create a copy of savingsGoals array
+      const updatedGoals = state.savingsGoals.map((goal) => {
+        if (goal.id === goalId) {
+          return {
+            ...goal,
+            current: goal.current + amount,
+          };
+        }
+        return goal;
+      });
+
+      // Update the total savings amount
+      const newTotalSavings = state.savings + amount;
+
+      return {
+        savingsGoals: updatedGoals,
+        savings: newTotalSavings,
+      };
+    }),
+
+  createSavingsGoal: (goalData) =>
+    set((state) => {
+      // Generate a new ID (simple implementation)
+      const newId = Math.max(...state.savingsGoals.map((goal) => goal.id)) + 1;
+
+      const newGoal = {
+        id: newId,
+        current: 0,
+        ...goalData,
+      };
+
+      return {
+        savingsGoals: [...state.savingsGoals, newGoal],
+      };
+    }),
+
+  updateSavingsGoal: (goalId, updatedData) =>
+    set((state) => {
+      const updatedGoals = state.savingsGoals.map((goal) => {
+        if (goal.id === goalId) {
+          return {
+            ...goal,
+            ...updatedData,
+          };
+        }
+        return goal;
+      });
+
+      return {
+        savingsGoals: updatedGoals,
+      };
+    }),
+
+  deleteSavingsGoal: (goalId) =>
+    set((state) => {
+      // Filter out the goal to be deleted
+      const filteredGoal = state.savingsGoals.find(
+        (goal) => goal.id === goalId
+      );
+      const updatedGoals = state.savingsGoals.filter(
+        (goal) => goal.id !== goalId
+      );
+
+      // Recalculate total savings
+      const amountToDeduct = filteredGoal ? filteredGoal.current : 0;
+      const newTotalSavings = state.savings - amountToDeduct;
+
+      return {
+        savingsGoals: updatedGoals,
+        savings: newTotalSavings,
+      };
+    }),
 
   fetchDashboardData: async (): Promise<void> => {
     set({ isLoading: true, error: null });
