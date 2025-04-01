@@ -62,7 +62,7 @@ const InvestmentCard = () => {
         </div>
       </div>
 
-      <div className="flex lg:justify-between lg:flex-row md:flex-col lg:gap-0 gap-5 ">
+      <div className="flex lg:justify-between lg:flex-row md:flex-col lg:gap-2 gap-5 ">
         <button
           onClick={() => navigate("/investments")}
           className="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors text-sm font-medium cursor-pointer"

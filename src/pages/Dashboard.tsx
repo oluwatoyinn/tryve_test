@@ -1,4 +1,3 @@
-// src/pages/Dashboard.jsx
 import useDashboardStore from "@/store/dashboardStore";
 import { useEffect } from "react";
 import BalanceCard from "../components/dashboard/cards/BalanceCard";

@@ -1,18 +1,15 @@
 import React from 'react';
 
-// Define the icon types for better type safety
 type IconType = 'expense' | 'income' | 'chart';
 
-// Define the change direction types
 type ChangeType = 'up' | 'down';
 
-// Define the props interface
 interface StatsCardProps {
   title: string;
   value: string | number;
   icon?: IconType;
-  change?: string; // Optional prop
-  changeType?: ChangeType; // Optional prop
+  change?: string;
+  changeType?: ChangeType;
 }
 
 const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon, change, changeType }) => {

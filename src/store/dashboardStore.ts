@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 
-// Define types for all data structures
 interface Transaction {
   id: number;
   type: "deposit" | "withdrawal" | "investment";
@@ -247,7 +245,6 @@ const useDashboardStore = create<DashboardState>((set) => ({
       @ description of activity: I am using the mock data already defined
       */
       }
-
       await new Promise<void>((resolve) => setTimeout(resolve, 1000));
       set({ isLoading: false });
     } catch (error) {

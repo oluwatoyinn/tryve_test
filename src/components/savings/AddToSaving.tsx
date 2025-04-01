@@ -1,25 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { nairaFormat } from "@/lib/helpers";
 import useDashboardStore from "@/store/dashboardStore";
-import React, { FormEvent, useState } from "react";
+import { useState } from "react";
+import TextField from "../common/text-field/text-field";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "../common/button";
+import { savingSchema, Inputs } from "@/validations/saving-schema";
 
 const AddToSaving = ({ showSuccessMessage }: any) => {
   const { savingsGoals, addToSavings } = useDashboardStore();
-  // Add to savings form state
-  const [amount, setAmount] = useState<string>("");
   const [selectedGoalId, setSelectedGoalId] = useState<number>(
     savingsGoals[0]?.id || 1
   );
-  // Handle adding to savings
-  const handleAddToSavings = (e: FormEvent) => {
-    e.preventDefault();
-    const amountValue = parseFloat(amount);
 
-    if (isNaN(amountValue) || amountValue <= 0) return;
+  const { control, handleSubmit, reset } = useForm<Inputs>({
+    resolver: yupResolver(savingSchema),
+    defaultValues: {
+      amount: 0,
+    },
+  });
 
-    addToSavings(selectedGoalId, amountValue);
-    setAmount("");
+  const handleAddToSavings: SubmitHandler<Inputs> = async (data) => {
+    addToSavings(selectedGoalId, data?.amount);
     showSuccessMessage("Successfully added to your savings!");
+    reset();
   };
   return (
     <div className="lg:col-span-1">
@@ -28,7 +33,7 @@ const AddToSaving = ({ showSuccessMessage }: any) => {
           Add to Savings
         </h2>
 
-        <form onSubmit={handleAddToSavings}>
+        <form onSubmit={handleSubmit(handleAddToSavings)}>
           <div className="mb-4">
             <label
               htmlFor="goal"
@@ -53,38 +58,24 @@ const AddToSaving = ({ showSuccessMessage }: any) => {
           </div>
 
           <div className="mb-6">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Amount
-            </label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <span className="text-gray-500">₦</span>
-              </div>
-              <input
-                type="number"
-                id="amount"
-                className="w-full pl-8 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                disabled={savingsGoals.length === 0}
-                required
-              />
-            </div>
+            <TextField
+              label="amount"
+              name="amount"
+              control={control}
+              iconPosition="left"
+              placeholder="Enter your amount"
+              className="block w-full rounded-md border border-gray-300 py-2 pl-5 text-foreground shadow-sm outline-none focus:border focus:border-green-400 focus:ring-0 focus:ring-green-200 disabled:cursor-not-allowed disabled:bg-gray-200/50 disabled:text-gray-500;"
+            />
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-            disabled={savingsGoals.length === 0}
-          >
-            Add to Savings
-          </button>
+          <div className="mt-3">
+            <Button
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50"
+              type="submit"
+              label="Add to Savings"
+              onClick={handleSubmit(handleAddToSavings)}
+            />
+          </div>
         </form>
 
         <div className="mt-6 p-4 bg-blue-50 rounded-lg">

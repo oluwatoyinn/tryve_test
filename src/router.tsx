@@ -5,8 +5,6 @@ import DashboardLayout from "./layouts/DashboardLayout";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 import Savings from "./components/savings";
-import Investments from "./components/investments";
-import Transactions from "./components/transactions";
 
 const router = createBrowserRouter([
   {
@@ -29,14 +27,14 @@ const router = createBrowserRouter([
         path: "savings",
         element: <Savings />,
       },
-      {
-        path: "investments",
-        element: <Investments />,
-      },
-      {
-        path: "transactions",
-        element: <Transactions />,
-      },
+      // {
+      //   path: "investments",
+      //   element: <Investments />,
+      // },
+      // {
+      //   path: "transactions",
+      //   element: <Transactions />,
+      // },
     ],
   },
   {
